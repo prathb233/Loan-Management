@@ -170,14 +170,15 @@ public class LoanDAO extends DBConnection {
 
 	
 	// Method to get a loan by its ID and print its details
-    public void getLoanById(int loanId) {
+    public Loan getLoanById(int loanId) {
+    	Loan loan = null;
         try {
             ps = con.prepareStatement("SELECT * FROM Loan WHERE loanId = ?");
             ps.setInt(1, loanId);
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                Loan loan = extractLoanFromResultSet(rs);
+                loan = extractLoanFromResultSet(rs);
                 System.out.println("Loan details for Loan ID " + loanId + ":");
                 System.out.println(loan);
             } else {
@@ -195,9 +196,10 @@ public class LoanDAO extends DBConnection {
                 e.printStackTrace();
             }
         }
+        return loan;
     }
     
-    // Helper method to extract a Loan object from the ResultSet
+    // Method to extract a Loan object from the ResultSet
     private static Loan extractLoanFromResultSet(ResultSet rs) throws SQLException {
         int loanId = rs.getInt("loanId");
         int customerId = rs.getInt("customerId");

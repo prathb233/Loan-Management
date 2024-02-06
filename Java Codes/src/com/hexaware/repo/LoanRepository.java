@@ -85,11 +85,37 @@ public class LoanRepository implements ILoanRepository {
 	}
 
 	public static List<Loan> getAllLoan() {
+		loanDAO.getConn();
+
 		return loanDAO.getAllLoan();
 	}
 
 	public static void getLoanById(int loanId) {
+		loanDAO.getConn();
+
 		loanDAO.getLoanById(loanId);		
+	}
+	
+	public double calculateEMI(int loanId) {
+		loanDAO.getConn();
+
+	    Loan loan = loanDAO.getLoanById(loanId);  // Fetch details from the database
+
+
+	    double principalAmount = loan.getPrincipalAmount();
+	    double interestRate = loan.getInterestRate() / 100 / 12; // Monthly interest rate
+	    int loanTerm = loan.getLoanTerm();
+
+	    return calculateEMI(principalAmount, interestRate, loanTerm);
+	}
+
+	public double calculateEMI(double principalAmount, double interestRate, int loanTerm) {
+	    double monthlyInterestRate = interestRate / 12; // Monthly interest rate
+
+	    double emi = (principalAmount * monthlyInterestRate * Math.pow((1 + monthlyInterestRate), loanTerm))
+	            / (Math.pow((1 + monthlyInterestRate), loanTerm) - 1);
+
+	    return emi;
 	}
 	
 }

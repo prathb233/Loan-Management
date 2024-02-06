@@ -10,6 +10,8 @@ public class LoanManagementApp {
 	
     static LoanRepository homeLoan = new LoanRepository();
     static LoanRepository carLoan = new LoanRepository();
+    static LoanRepository loanRepo = new LoanRepository();
+
 
     static CustomerRepository customerRepository = new CustomerRepository();
 
@@ -22,56 +24,56 @@ public class LoanManagementApp {
         System.out.println("Choose the loan type\n");
         System.out.println("1. Home Loan");
         System.out.println("2. Car Loan");
-        System.out.print("Enter your choice (1 or 2): ");
-
-        int loanTypeChoice = scanner.nextInt();
-        scanner.nextLine(); // Consume the newline character
-
-        if (loanTypeChoice == 1) {
-            // Apply for Home Loan
-            System.out.println("Enter customer details for Home Loan:");
-            customerRepository.getCustomerDetails(scanner);
-            homeLoan.applyHomeLoan();
-
-
-        } else if (loanTypeChoice == 2) {
-            // Apply for Car Loan
-            //CarLoan carLoan = new CarLoan();
-            System.out.println("Enter customer details for Home Loan:");
-            customerRepository.getCustomerDetails(scanner);
-            carLoan.applyCarLoan();
-
-        } else {
-            System.out.println("Invalid choice. Exiting...");
-        }
-        
-        
-        displayLoanOptions(scanner);
-
-        scanner.close();
-    }
-	
-	private static void displayLoanOptions(Scanner scanner) {
-        System.out.println("\nChoose an option to view loans:");
         System.out.println("3. Display all loans");
         System.out.println("4. Display loan by ID");
-        System.out.print("Enter your choice (3 or 4): ");
+        System.out.println("5. Calculate EMI");
+
+        System.out.print("Enter your choice: ");
 
         int optionChoice = scanner.nextInt();
         scanner.nextLine(); // Consume the newline character
 
         switch (optionChoice) {
+        	case 1: {
+                // Apply for Home Loan
+                System.out.println("Enter customer details for Home Loan:");
+                customerRepository.getCustomerDetails(scanner);
+                homeLoan.applyHomeLoan();
+                break;
+        	}
+        	case 2: {
+                // Apply for Car Loan
+                //CarLoan carLoan = new CarLoan();
+                System.out.println("Enter customer details for Home Loan:");
+                customerRepository.getCustomerDetails(scanner);
+                carLoan.applyCarLoan();
+                break;
+        	}
             case 3:
                 displayAllLoans();
                 break;
-            case 4:
-                displayLoanById(scanner);
-                break;
+            case 4:{
+            	displayLoanById(scanner);
+            	break;
+            }
+            	
+            case 5:{
+            	System.out.println("Enter Loan ID: ");
+            	int loanID = scanner.nextInt();
+            	
+            	double emi = loanRepo.calculateEMI(loanID);
+            	System.out.println("The EMI for given Loan ID is: " + emi);
+
+            	break;
+            }
+            
             default:
                 System.out.println("Invalid choice. Exiting...");
         }
-    }
 
+        scanner.close();
+    }
+	
     private static void displayAllLoans() {
         System.out.println("\nAll Loans:");
         List<Loan> allLoans = LoanRepository.getAllLoan();
