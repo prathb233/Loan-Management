@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.hexaware.dao.LoanDAO;
+import com.hexaware.exception.InvalidLoanException;
 import com.hexaware.model.Loan;
 
 public class LoanRepository implements ILoanRepository {
@@ -90,10 +91,24 @@ public class LoanRepository implements ILoanRepository {
 		return loanDAO.getAllLoan();
 	}
 
-	public static void getLoanById(int loanId) {
+	public void getLoanById(Scanner scanner) {
 		loanDAO.getConn();
 
-		loanDAO.getLoanById(loanId);		
+	    int loanId = 0;
+	    boolean isValidInput = false;
+
+	    do {
+	        try {
+	            System.out.print("\nEnter the Loan ID to view details: ");
+	            loanId = scanner.nextInt();
+	    		loanDAO.getLoanById(loanId);
+	            isValidInput = true; // Set to true if no exception is thrown
+	        } catch (InvalidLoanException e) {
+	            System.out.println(e.getMessage() + "\nLoan with ID " + loanId + " not found. Please try again.");
+	            isValidInput = false; // Set to false to repeat the loop
+
+	        }
+	    } while (!isValidInput);
 	}
 	
 	public double calculateEMI(int loanId) {
@@ -110,7 +125,7 @@ public class LoanRepository implements ILoanRepository {
 	}
 
 	public double calculateEMI(double principalAmount, double interestRate, int loanTerm) {
-	    double monthlyInterestRate = interestRate / 12; // Monthly interest rate
+	    double monthlyInterestRate = interestRate / 12;
 
 	    double emi = (principalAmount * monthlyInterestRate * Math.pow((1 + monthlyInterestRate), loanTerm))
 	            / (Math.pow((1 + monthlyInterestRate), loanTerm) - 1);

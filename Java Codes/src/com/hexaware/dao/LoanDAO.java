@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hexaware.model.Loan;
+import com.hexaware.exception.*;
 import com.hexaware.util.DBConnection;
 
 public class LoanDAO extends DBConnection {
@@ -182,11 +183,15 @@ public class LoanDAO extends DBConnection {
                 System.out.println("Loan details for Loan ID " + loanId + ":");
                 System.out.println(loan);
             } else {
-                System.out.println("Loan with ID " + loanId + " not found.");
-            }
+            	throw new InvalidLoanException();
+                //System.out.println("Loan with ID " + loanId + " not found.");
+            } 
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            
+        } catch(InvalidLoanException e) {
+        	//System.out.println(e.getMessage()+ "\nLoan with ID" + loanId + " not found.");
         } finally {
             // Close resources
             try {
@@ -194,7 +199,7 @@ public class LoanDAO extends DBConnection {
                 if (ps != null) ps.close();
             } catch (SQLException e) {
                 e.printStackTrace();
-            }
+            } 
         }
         return loan;
     }

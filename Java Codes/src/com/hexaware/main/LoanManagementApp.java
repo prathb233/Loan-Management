@@ -53,7 +53,7 @@ public class LoanManagementApp {
                 displayAllLoans();
                 break;
             case 4:{
-            	displayLoanById(scanner);
+            	loanRepo.getLoanById(scanner);
             	break;
             }
             	
@@ -82,11 +82,6 @@ public class LoanManagementApp {
         }
     }
 
-    private static void displayLoanById(Scanner scanner) {
-        System.out.print("\nEnter the Loan ID to view details: ");
-        int loanId = scanner.nextInt();
-        LoanRepository.getLoanById(loanId);
-    }
 }
 
 
