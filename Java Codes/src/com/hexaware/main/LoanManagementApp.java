@@ -12,7 +12,6 @@ public class LoanManagementApp {
     static LoanRepository carLoan = new LoanRepository();
     static LoanRepository loanRepo = new LoanRepository();
 
-
     static CustomerRepository customerRepository = new CustomerRepository();
 
 	public static void main(String[] args) {
